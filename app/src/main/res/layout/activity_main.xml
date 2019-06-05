@@ -6,23 +6,26 @@
     android:orientation="vertical">
 
 
+
+
+
+    <com.ezreal52.demolayout.NewTabLayout
+        app:newTabTextColor="@drawable/tab_color"
+        android:id="@+id/newTablayout"
+        android:background="@color/gray"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+
+    </com.ezreal52.demolayout.NewTabLayout>
+
+
+
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="0dp"></android.support.v4.view.ViewPager>
-
-    <come.ezreal.RagnarTabLayout.RagnarTabLayout
-        android:id="@+id/tablayout"
-        android:background="@color/gray"
-        app:textSize="12dp"
-        app:iconWidth="20dp"
-        app:iconHeight="20dp"
-        app:textSelectColor="#3498DB"
-        app:textUnSelectColor="#000000"
-        app:tabIndicatorHeight="0dp"
-        android:layout_width="match_parent"
-        android:layout_height="54dp"></come.ezreal.RagnarTabLayout.RagnarTabLayout>
 
 
 </LinearLayout>

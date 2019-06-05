@@ -1,4 +1,4 @@
-package com.ezreal52.demolayout;
+package com.ezreal52.demolayout.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class MsgFragment extends BaseFragment {
+import com.ezreal52.demolayout.R;
+
+public class ContactFragment extends BaseFragment {
 
 
     @Override
@@ -18,7 +20,7 @@ public class MsgFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_msg,null);
+        View v = inflater.inflate(R.layout.fragment_contact,null);
         return v;
     }
 }
