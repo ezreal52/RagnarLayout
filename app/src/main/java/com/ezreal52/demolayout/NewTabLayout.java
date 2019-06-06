@@ -91,7 +91,7 @@ public class  NewTabLayout extends HorizontalScrollView {
             if (tabView == null) {
                 throw new IllegalStateException("tabView is null.");
             }
-            LogUtils.e("count:L"+adapter.getCount());
+
             //设置每个tab等宽
             if (true) {
                 LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) tabView.getLayoutParams();
@@ -109,7 +109,7 @@ public class  NewTabLayout extends HorizontalScrollView {
             tabStrip.addView(tabView);
 
             if (i == viewPager.getCurrentItem()) {
-                tabView.setEnabled(true);
+                tabView.setSelected(true);
             }
 
 
@@ -132,8 +132,9 @@ public class  NewTabLayout extends HorizontalScrollView {
     private class InternalViewPagerListener implements ViewPager.OnPageChangeListener{
 
         @Override
-        public void onPageScrolled(int position, float v, int i1) {
-
+        public void onPageScrolled(int position, float positionOffset, int i1) {
+            tabStrip.onViewPagerPageChanged(position,positionOffset);
+            scrollToTab(position,positionOffset);
         }
 
         @Override
@@ -143,6 +144,7 @@ public class  NewTabLayout extends HorizontalScrollView {
                 tabStrip.getChildAt(i).setSelected(position == i);
             }
 
+
         }
 
         @Override
@@ -151,9 +153,36 @@ public class  NewTabLayout extends HorizontalScrollView {
         }
     }
 
+
+
+    //移动sccollview
+
+    /**
+     * @param tabIndex
+     * @param positionOffset
+     */
+    //offset是0-1的数，tabWidth*offset
+    private void scrollToTab(int tabIndex, float positionOffset) {
+        final int tabStripChildCount = tabStrip.getChildCount();
+        if (tabStripChildCount == 0 || tabIndex < 0 || tabIndex >= tabStripChildCount) {
+            return;
+        }
+
+        View selectedTab = tabStrip.getChildAt(tabIndex);
+        int extraOffset ;
+        int x =0;
+        View nextTab = tabStrip.getChildAt(tabIndex + 1);
+        int selectHalfWidth = Utils.getWidth(selectedTab) / 2 + Utils.getMarginEnd(selectedTab);
+        int nextHalfWidth = Utils.getWidth(nextTab) / 2 + Utils.getMarginStart(nextTab);
+        extraOffset = Math.round(positionOffset * (selectHalfWidth + nextHalfWidth));
+        int start = Utils.getStart(selectedTab);
+        x += start + extraOffset;
+        scrollTo(x, 0);
+
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        Log.d(TAG, "onMeasure:");
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
 
@@ -164,28 +193,26 @@ public class  NewTabLayout extends HorizontalScrollView {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
-        Log.d(TAG, "-------------:");
-        Log.d(TAG, "l:" + l);
-        Log.d(TAG, "t:" + t);
-        Log.d(TAG, "r:" + r);
-        Log.d(TAG, "b:" + b);
-        Log.d(TAG, "-------------:");
+        // Ensure first scroll
+        if (changed && viewPager != null) {
+            scrollToTab(viewPager.getCurrentItem(), 0);
+        }
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-//        super.onDraw(canvas);
-        Log.d(TAG, "onDraw:");
 
-
-    }
-
-    public void setTabTextColor(int selectedColor,int unselectedColor) {
+    //设置tab文字颜色
+    public void setTabTextColor(int selectedColorId,int unselectedColorId) {
+        ContextCompat.getColor(context,selectedColorId);
 
         tabViewTextColors = new ColorStateList(
                 new int[][]{new int[]{android.R.attr.state_selected},new int[]{}},
-                new int[]{selectedColor,unselectedColor});
+                new int[]{  ContextCompat.getColor(context,selectedColorId),  ContextCompat.getColor(context,unselectedColorId)});
 
+
+    }
+    //设置indicator颜色
+    public void setTabIndicatorColor(int indicatorColorId){
+        tabStrip.setTabIndicatorColor(ContextCompat.getColor(context,indicatorColorId));
 
     }
 
